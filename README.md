@@ -50,6 +50,9 @@ Autor: Miguel ([@miguelvzs](https://github.com/miguelvzs)).
 - **Músicas de demonstração geradas pelo próprio programa**: na primeira execução ele "compõe" 12
   melodias curtas e grava em `.wav` usando só `math`, `struct` e `wave`. Todos os artistas, álbuns e
   músicas de exemplo são **fictícios**; não há nenhuma música com direitos autorais no repositório.
+- **11 músicas em 16 bits**: um sintetizador no estilo dos videogames de 16 bits toca clássicos em
+  domínio público e temas de jogo originais, com melodia, baixo, arpejo e bateria em canais
+  separados (veja [Músicas em 16 bits](#músicas-em-16-bits)).
 
 ## Como instalar e rodar
 
@@ -65,8 +68,11 @@ python main.py
 No Windows também funciona com `py main.py`. No Linux, se `python` não existir, use `python3 main.py`.
 
 Na primeira execução o programa cria a pasta `dados/` com o banco `player.db`, as tabelas (pelo
-script `banco/schema.sql`), os dados de exemplo e as músicas de demonstração. Leva alguns segundos
-uma única vez.
+script `banco/schema.sql`), os dados de exemplo e as 23 músicas de demonstração. Leva cerca de meio
+minuto uma única vez (as músicas em 16 bits são calculadas amostra por amostra).
+
+Se você já tinha rodado uma versão anterior, apague a pasta `dados/` para as músicas em 16 bits
+entrarem no banco.
 
 ### Opções
 
@@ -101,6 +107,7 @@ erro com a próxima opção.
 | `random` | padrão | Modo aleatório (`random.shuffle`) |
 | `time` | padrão | Relógio do player e animação da barra |
 | `math`, `struct`, `wave` | padrão | Gerar e ler as músicas `.wav` de demonstração |
+| `array` | padrão | Guardar as amostras de 16 bits das músicas em 16 bits antes de gravar |
 | `tempfile` | padrão | Arquivo temporário para continuar depois da pausa (winsound) |
 | `winsound` | padrão (só Windows) | Tocar `.wav` de verdade |
 | `unittest`, `subprocess`, `io`, `contextlib`, `shutil` | padrão | Testes automáticos |
@@ -115,7 +122,8 @@ player-musicas-terminal/
 ├── banco/
 │   ├── schema.sql               script de criação das 6 tabelas
 │   ├── conexao.py               classe Banco (connect, PRAGMA, execute, commit, rollback, close)
-│   └── dados_exemplo.py         dados fictícios do primeiro uso
+│   ├── dados_exemplo.py         dados fictícios do primeiro uso
+│   └── repertorio_16bits.py     arranjos das músicas em 16 bits (nota por nota, canal por canal)
 ├── modelos/                     classes que representam os dados
 │   ├── entidade.py              Entidade: classe-mãe com o id
 │   ├── artista.py, album.py, musica.py, playlist.py, reproducao.py
@@ -127,7 +135,8 @@ player-musicas-terminal/
 ├── audio/
 │   ├── player.py                Player: fila, tocar, pausar, próxima, aleatório, repetir
 │   ├── saidas.py                SaidaAudio (simulada), SaidaWinsound, SaidaPygame
-│   └── gerador_wav.py           gera as melodias .wav de demonstração
+│   ├── gerador_wav.py           gera as melodias .wav de demonstração
+│   └── chiptune.py              Canal e Trilha: o sintetizador das músicas em 16 bits
 ├── interface/                   tudo o que aparece no terminal
 │   ├── aplicacao.py             Aplicacao: junta banco, repositórios, player e menus
 │   ├── menu_base.py             MenuBase: laço de menu escrito uma vez só
@@ -143,6 +152,36 @@ player-musicas-terminal/
 ```
 
 A pasta `dados/` (banco, músicas geradas e relatórios) é criada pelo programa e fica fora do Git.
+
+## Músicas em 16 bits
+
+Os videogames de 16 bits tocavam música com um chip que mistura vários canais ao mesmo tempo. O
+`audio/chiptune.py` faz o mesmo em Python puro:
+
+- **`Canal`**: uma voz com um timbre. O **pulso** é uma onda quadrada de largura 50%, 25% ou 12,5%,
+  que faz a melodia e o arpejo. O **triângulo** tem 16 degraus e faz o baixo. A **bateria** usa
+  ruído e tem bumbo, caixa, chimbal e prato. Um canal mais curto que a melodia repete até o fim da
+  volta, que é como o baixo e a bateria fazem o loop.
+- **`Trilha`**: soma os canais, repete as voltas (podendo acelerar a cada volta), aplica um eco
+  curto, como o do Super Nintendo, e grava um `.wav` mono de 16 bits.
+- Os arranjos ficam em `banco/repertorio_16bits.py`, escritos nota por nota no mesmo formato
+  `NOTA:TEMPOS` das outras músicas.
+
+| # | Música | Origem |
+|---|---|---|
+| 1 | Korobeiniki | Canção popular russa do século XIX, a melodia que ficou famosa no Tetris |
+| 2 | Ode à Alegria | Beethoven, 9ª Sinfonia (1824) |
+| 3 | Na Gruta do Rei da Montanha | Grieg, Peer Gynt (1875); acelera a cada volta |
+| 4 | Can-can | Offenbach, Orfeu no Inferno (1858) |
+| 5 | Para Elisa | Beethoven (1810) |
+| 6 | Pequena Serenata Noturna | Mozart (1787) |
+| 7 | Assim Falou Zaratustra | Richard Strauss (1896), a abertura do filme *2001: Uma Odisseia no Espaço* |
+| 8 a 11 | Tela de Título, Fase 1: Campos de Bits, Chefão Final, Vitória! | Temas originais de um "jogo imaginário", compostos para este projeto |
+
+**Direitos autorais:** só entraram obras de compositores que morreram há mais de 70 anos, que no
+Brasil estão em domínio público (Lei 9.610/98, art. 41), e temas compostos para o projeto. Não
+há gravações: tudo é calculado pelo programa. Músicas recentes e temas de jogos e filmes atuais
+têm direitos autorais e por isso não entram no repositório.
 
 ## Banco de dados
 
@@ -252,13 +291,16 @@ Na pasta do projeto:
 python -m unittest -v
 ```
 
-São 60 testes (`unittest`, biblioteca padrão), cada um com um banco temporário que é apagado no fim:
+São 72 testes (`unittest`, biblioteca padrão), cada um com um banco temporário que é apagado no fim:
 
 - `testes/test_repositorios.py`: CRUD de todas as tabelas, chaves estrangeiras bloqueando exclusões,
   `UNIQUE`, `CHECK`, `ON DELETE CASCADE`, busca, ranking e proteção contra SQL injection.
 - `testes/test_modelos.py`: validações, associação, encapsulamento e `__str__`.
 - `testes/test_player.py`: tocar, pausar, próxima, anterior, fim da fila, aleatório, repetir e o
   gerador de `.wav`.
+- `testes/test_chiptune.py`: o sintetizador de 16 bits (frequência das notas medida no áudio, loop
+  dos canais, aceleração, `.wav` mono de 16 bits igual a cada geração) e o repertório (canais que se
+  encaixam, títulos e origem de cada música).
 - `testes/test_aplicacao.py`: roda o programa de verdade digitando as respostas do roteiro
   `testes/roteiro_completo.txt` (passa por todas as opções de todos os menus, com entradas erradas no
   meio) e confere que ele termina sem nenhum `Traceback`; testa também Ctrl+C e entrada que acaba no

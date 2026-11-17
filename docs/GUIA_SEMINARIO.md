@@ -22,7 +22,7 @@ para a versão deste repositório; se mudar o código, confira de novo.
 | 3:00 a 6:00 | **Orientação a Objetos (Aula 14)**: classe, `__init__`, `self`; encapsulamento com `_` e `__` e get/set que valida; `__str__`/`__repr__`; herança com `super().__init__()`; sobrescrita e polimorfismo; associação (instância como atributo) | `modelos/entidade.py`, `modelos/artista.py`, `modelos/musica.py`; `repositorios/base.py` + `repositorios/artista_repositorio.py`; `audio/saidas.py` |
 | 6:00 a 7:30 | **Módulos e pacotes (Aula 11)**, **arquivos (Aula 12)** e **exceções (Aula 13)**: cada pasta é um pacote; o programa lê o `schema.sql`, grava relatório `.txt` e `.wav`; nenhuma entrada errada derruba o programa | Árvore de pastas no README; `utils/entrada.py`; `interface/menu_base.py`; `main.py`. No programa: digitar `abc` num menu e numa pergunta de número |
 | 7:30 a 9:00 | **Player**: estados (parado, tocando, pausado), relógio com `time.time()`, aleatório com `random.shuffle`, repetir, histórico e ranking com `COUNT` e `GROUP BY` | `audio/player.py`; `repositorios/historico_repositorio.py`. No programa: **7 Histórico e relatórios** → **1** e **5** (exporta `.txt`) |
-| 9:00 a 10:00 | **Testes e entrega**: 60 testes com `unittest` e banco temporário, roteiro que passa por todos os menus; repositório público e README | `python -m unittest`; `testes/roteiro_completo.txt`; GitHub |
+| 9:00 a 10:00 | **Testes e entrega**: 72 testes com `unittest` e banco temporário, roteiro que passa por todos os menus; repositório público e README | `python -m unittest`; `testes/roteiro_completo.txt`; GitHub |
 
 ## Onde está cada conceito
 
@@ -140,7 +140,7 @@ para a versão deste repositório; se mudar o código, confira de novo.
     `math.sin`, `struct.pack` e `wave`.
 24. **O arquivo `.db` está no GitHub?** Não, está no `.gitignore`. O `schema.sql` vai no repositório e
     cria o banco na primeira execução.
-25. **Como você testou?** 60 testes com `unittest`, cada um com banco temporário, e um roteiro que roda
+25. **Como você testou?** 72 testes com `unittest`, cada um com banco temporário, e um roteiro que roda
     o programa de verdade passando por todos os menus com entradas erradas.
 
 ## O que vai além da matéria (saiba explicar ou diga que pesquisou)
@@ -156,3 +156,19 @@ para a versão deste repositório; se mudar o código, confira de novo.
 | `os.system("")` e cores ANSI | `utils/tela.py` | Liga as cores no console do Windows |
 | `sys.stdout.reconfigure(errors="replace")` | `main.py:90` | Se a saída for para arquivo, caractere estranho vira `?` em vez de erro |
 | `subprocess`, `unittest.mock` | `testes/` | Só nos testes: rodar o programa e simular o Ctrl+C |
+| `array.array("h", ...)`, `random.Random(semente)` | `audio/chiptune.py` | Lista compacta de inteiros de 16 bits; sorteio com semente fixa para o ruído da bateria sair igual toda vez |
+
+## Se perguntarem das músicas em 16 bits
+
+- **O que são:** 11 músicas tocadas por um sintetizador no estilo dos videogames de 16 bits
+  (`audio/chiptune.py`): 7 clássicos em domínio público (Beethoven, Grieg, Mozart, Offenbach,
+  Richard Strauss e a canção russa Korobeiniki, a do Tetris) e 4 temas de jogo originais.
+- **Orientação a Objetos:** a `Trilha` **tem** vários `Canal` (associação/composição, igual ao
+  `Album` que tem um `Artista`). Cada `Canal` guarda seus atributos privados (`__timbre`,
+  `__notas`, `__volume`) e sabe se `renderizar()`; a `Trilha` só pede para cada canal se
+  renderizar e soma o resultado.
+- **Como o som é feito:** pulso = onda quadrada (`1` ou `-1` conforme a fase), triângulo = baixo,
+  ruído sorteado = bateria. A soma dos canais vira inteiros de 16 bits e o `wave` grava o `.wav`.
+- **Por que não tem música recente nem tema de filme atual:** têm direitos autorais. Só entrou
+  obra de compositor morto há mais de 70 anos (domínio público no Brasil) e tema próprio.
+- **Onde mostrar:** **1 Player** → **9** → **3** (playlist) → **4** "16 bits".
