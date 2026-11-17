@@ -1,6 +1,6 @@
 # Roteiro completo: passa por TODAS as opções de TODOS os menus, com entradas erradas no meio.
 # Uma resposta por linha. Linha em branco = Enter. Linhas com # são comentários.
-# Dados de exemplo: artistas 1 a 5, álbuns 1 a 5, músicas 1 a 12, playlists 1 a 3.
+# Dados de exemplo: artistas 1 a 6, álbuns 1 a 7, músicas 1 a 23, playlists 1 a 4.
 #
 # ===== MENU PRINCIPAL: opções inválidas =====
 abc
@@ -13,7 +13,7 @@ abc
 # 1 listar
 1
 
-# 2 cadastrar: nome vazio (erro), depois nome e país -> vira o ID 6
+# 2 cadastrar: nome vazio (erro), depois nome e país -> vira o ID 7
 2
 
 Banda do Teste
@@ -30,9 +30,9 @@ x
 99
 1
 
-# 4 editar o 6: novo nome; "-" apaga o país
+# 4 editar o 7: novo nome; "-" apaga o país
 4
-6
+7
 Banda do Teste Editada
 -
 
@@ -41,9 +41,9 @@ Banda do Teste Editada
 1
 s
 
-# 5 excluir o 6: resposta inválida na confirmação, depois "s"
+# 5 excluir o 7: resposta inválida na confirmação, depois "s"
 5
-6
+7
 talvez
 s
 
@@ -60,7 +60,7 @@ s
 3
 1
 
-# 2 cadastrar: artista 5; ano com texto, ano fora do limite, ano certo -> vira o ID 6
+# 2 cadastrar: artista 5; ano com texto, ano fora do limite, ano certo -> vira o ID 8
 2
 5
 Álbum Fantasma
@@ -73,15 +73,15 @@ Rock
 3
 1
 
-# 4 editar o 6 com ano inválido: o modelo recusa (ValueError) e nada é gravado
+# 4 editar o 8 com ano inválido: o modelo recusa (ValueError) e nada é gravado
 4
-6
+8
 Álbum Fantasma (Deluxe)
 abc
 
-# 4 editar o 6 do jeito certo: "-" apaga o ano, troca o gênero, mantém o artista
+# 4 editar o 8 do jeito certo: "-" apaga o ano, troca o gênero, mantém o artista
 4
-6
+8
 Álbum Fantasma (Deluxe)
 -
 Rock Alternativo
@@ -98,9 +98,9 @@ s
 2
 1
 
-# 2 cadastrar sem arquivo: caminho errado, depois Enter; durações inválidas -> vira o ID 13
+# 2 cadastrar sem arquivo: caminho errado, depois Enter; durações inválidas -> vira o ID 24
 2
-6
+8
 Música Sem Arquivo
 C:\nao\existe.wav
 
@@ -109,16 +109,16 @@ abc
 3:25
 
 
-# 2 cadastrar com arquivo .wav: a duração é lida do arquivo -> vira o ID 14
+# 2 cadastrar com arquivo .wav: a duração é lida do arquivo -> vira o ID 25
 2
-6
+8
 Música Com Arquivo
 {PASTA_DADOS}/musicas_demo/440_hz.wav
 
 
-# 3 editar a 13: mantém título, muda duração, mantém faixa, não troca arquivo
+# 3 editar a 24: mantém título, muda duração, mantém faixa, não troca arquivo
 3
-13
+24
 
 1:05
 
@@ -137,18 +137,18 @@ xyzxyz
 6
 5
 
-# 7 adicionar a 13 na playlist 3, e de novo (já está)
+# 7 adicionar a 24 na playlist 3, e de novo (já está)
 7
-13
+24
 3
 
 7
-13
+24
 3
 
-# 4 excluir a 14 (sai também da fila do player)
+# 4 excluir a 25 (sai também da fila do player)
 4
-14
+25
 s
 
 0
@@ -162,7 +162,7 @@ s
 Para codar
 
 
-# 2 criar a playlist 4
+# 2 criar a playlist 5
 2
 Estudo para a prova
 POO dia 24/11
@@ -171,9 +171,9 @@ POO dia 24/11
 3
 1
 
-# 4 adicionar 1 e 2 na playlist 4 (e tentar a 1 de novo)
+# 4 adicionar 1 e 2 na playlist 5 (e tentar a 1 de novo)
 4
-4
+5
 1
 s
 2
@@ -181,20 +181,20 @@ s
 1
 n
 
-# 6 mover: item 2 da playlist 4 para a posição 1
+# 6 mover: item 2 da playlist 5 para a posição 1
 6
-4
+5
 2
 1
 
-# 5 remover o item 1 da playlist 4
+# 5 remover o item 1 da playlist 5
 5
-4
+5
 1
 
-# 7 editar a 4: mantém o nome, "-" apaga a descrição
+# 7 editar a 5: mantém o nome, "-" apaga a descrição
 7
-4
+5
 
 -
 
@@ -202,9 +202,9 @@ n
 9
 3
 
-# 8 excluir a playlist 4
+# 8 excluir a playlist 5
 8
-4
+5
 s
 
 0

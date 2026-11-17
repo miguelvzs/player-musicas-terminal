@@ -1,14 +1,16 @@
 """Dados de exemplo para o primeiro uso.
 
-Tudo aqui é FICTÍCIO: artistas, álbuns e melodias foram inventados para o
-projeto. As músicas são geradas pelo próprio programa (audio/gerador_wav.py),
-então o repositório não tem nenhuma música com direitos autorais.
+Os artistas e álbuns são FICTÍCIOS. As músicas são geradas pelo próprio
+programa: as melodias simples por audio/gerador_wav.py e as de 16 bits por
+audio/chiptune.py (clássicos em domínio público e temas originais, ver
+banco/repertorio_16bits.py). O repositório não tem música com direitos autorais.
 """
 
 import os
 from datetime import datetime, timedelta
 
 from audio.gerador_wav import duracao_do_wav, gerar_wav
+from banco import repertorio_16bits
 from modelos.album import Album
 from modelos.artista import Artista
 from modelos.musica import Musica
@@ -93,6 +95,12 @@ PLAYLISTS = [
      ["Xote do Ponto e Vírgula", "Baião do Banco de Dados"]),
 ]
 
+# As músicas em 16 bits entram depois das de cima, então os IDs 1 a 12 não mudam.
+ARTISTAS = ARTISTAS + repertorio_16bits.ARTISTAS
+ALBUNS = ALBUNS + repertorio_16bits.ALBUNS
+TRILHAS_16BITS = repertorio_16bits.TRILHAS
+PLAYLISTS = PLAYLISTS + repertorio_16bits.PLAYLISTS
+
 # Histórico inicial (fictício), para o ranking não começar vazio: (título, vezes)
 HISTORICO = [
     ("Loop Infinito", 5),
@@ -109,18 +117,22 @@ def garantir_arquivos_demo(pasta_dados, avisar=print):
     if not os.path.exists(pasta):
         os.makedirs(pasta)
     faltando = []
-    for musica in MUSICAS:
+    for musica in MUSICAS + TRILHAS_16BITS:
         if not os.path.exists(os.path.join(pasta, musica["arquivo"])):
             faltando.append(musica)
     if faltando:
         avisar(f"Gerando {len(faltando)} música(s) de demonstração em {pasta} (só na primeira vez)...")
-        for musica in faltando:
+        for numero, musica in enumerate(faltando, start=1):
             destino = os.path.join(pasta, musica["arquivo"])
             # Grava com outro nome e só renomeia no fim: se o programa for
             # interrompido no meio, não fica um .wav pela metade.
             provisorio = destino + ".parcial"
-            gerar_wav(provisorio, musica["notas"], bpm=musica["bpm"],
-                      forma=musica["forma"], repeticoes=musica["repeticoes"])
+            if "canais" in musica:
+                avisar(f"  [{numero}/{len(faltando)}] {musica['titulo']} (16 bits)")
+                repertorio_16bits.montar_trilha(musica).gravar(provisorio)
+            else:
+                gerar_wav(provisorio, musica["notas"], bpm=musica["bpm"],
+                          forma=musica["forma"], repeticoes=musica["repeticoes"])
             os.replace(provisorio, destino)
     return len(faltando)
 
@@ -143,7 +155,7 @@ def popular(banco, pasta_dados):
         albuns_por_titulo[titulo] = albuns.inserir(album)
 
     musicas_por_titulo = {}
-    for dados in MUSICAS:
+    for dados in MUSICAS + TRILHAS_16BITS:
         caminho_completo = os.path.join(pasta_dados, PASTA_DEMO, dados["arquivo"])
         duracao = duracao_do_wav(caminho_completo)
         # Grava o caminho relativo à pasta de dados (funciona mesmo se a pasta mudar de lugar).
