@@ -1,0 +1,300 @@
+# Roteiro completo: passa por TODAS as opções de TODOS os menus, com entradas erradas no meio.
+# Uma resposta por linha. Linha em branco = Enter. Linhas com # são comentários.
+# Dados de exemplo: artistas 1 a 5, álbuns 1 a 5, músicas 1 a 12, playlists 1 a 3.
+#
+# ===== MENU PRINCIPAL: opções inválidas =====
+abc
+
+99
+
+#
+# ===== 4 ARTISTAS =====
+4
+# 1 listar
+1
+
+# 2 cadastrar: nome vazio (erro), depois nome e país -> vira o ID 6
+2
+
+Banda do Teste
+Brasil
+
+# 2 cadastrar com nome repetido (o banco recusa: UNIQUE)
+2
+Banda do Teste
+
+
+# 3 ver álbuns: ID com letra, ID que não existe, depois o 1
+3
+x
+99
+1
+
+# 4 editar o 6: novo nome; "-" apaga o país
+4
+6
+Banda do Teste Editada
+-
+
+# 5 excluir o 1, que tem álbuns (a chave estrangeira impede)
+5
+1
+s
+
+# 5 excluir o 6: resposta inválida na confirmação, depois "s"
+5
+6
+talvez
+s
+
+# 5 excluir e cancelar com 0
+5
+0
+
+# opção inválida dentro do submenu e voltar
+8
+
+0
+#
+# ===== 3 ÁLBUNS =====
+3
+1
+
+# 2 cadastrar: artista 5; ano com texto, ano fora do limite, ano certo -> vira o ID 6
+2
+5
+Álbum Fantasma
+dois mil
+1800
+2025
+Rock
+
+# 3 ver faixas do álbum 1
+3
+1
+
+# 4 editar o 6 com ano inválido: o modelo recusa (ValueError) e nada é gravado
+4
+6
+Álbum Fantasma (Deluxe)
+abc
+
+# 4 editar o 6 do jeito certo: "-" apaga o ano, troca o gênero, mantém o artista
+4
+6
+Álbum Fantasma (Deluxe)
+-
+Rock Alternativo
+
+
+# 5 excluir o 1, que tem músicas (a chave estrangeira impede)
+5
+1
+s
+
+0
+#
+# ===== 2 MÚSICAS =====
+2
+1
+
+# 2 cadastrar sem arquivo: caminho errado, depois Enter; durações inválidas -> vira o ID 13
+2
+6
+Música Sem Arquivo
+C:\nao\existe.wav
+
+3:75
+abc
+3:25
+
+
+# 2 cadastrar com arquivo .wav: a duração é lida do arquivo -> vira o ID 14
+2
+6
+Música Com Arquivo
+{PASTA_DADOS}/musicas_demo/440_hz.wav
+
+
+# 3 editar a 13: mantém título, muda duração, mantém faixa, não troca arquivo
+3
+13
+
+1:05
+
+n
+
+# 5 buscar "chip" e tocar o resultado 2
+5
+chip
+2
+
+# 5 buscar algo que não existe
+5
+xyzxyz
+
+# 6 tocar uma música: ID 5
+6
+5
+
+# 7 adicionar a 13 na playlist 3, e de novo (já está)
+7
+13
+3
+
+7
+13
+3
+
+# 4 excluir a 14 (sai também da fila do player)
+4
+14
+s
+
+0
+#
+# ===== 5 PLAYLISTS =====
+5
+1
+
+# 2 criar com nome repetido (o banco recusa: UNIQUE)
+2
+Para codar
+
+
+# 2 criar a playlist 4
+2
+Estudo para a prova
+POO dia 24/11
+
+# 3 ver a playlist 1
+3
+1
+
+# 4 adicionar 1 e 2 na playlist 4 (e tentar a 1 de novo)
+4
+4
+1
+s
+2
+s
+1
+n
+
+# 6 mover: item 2 da playlist 4 para a posição 1
+6
+4
+2
+1
+
+# 5 remover o item 1 da playlist 4
+5
+4
+1
+
+# 7 editar a 4: mantém o nome, "-" apaga a descrição
+7
+4
+
+-
+
+# 9 tocar a playlist 3
+9
+3
+
+# 8 excluir a playlist 4
+8
+4
+s
+
+0
+#
+# ===== 1 PLAYER =====
+1
+# 9 escolher o que tocar: opção fora do limite, depois playlist 2
+9
+7
+3
+2
+# 1 pausar, 1 continuar, 2 próxima, 3 anterior
+1
+1
+2
+3
+# 5 aleatório liga, 6 repetir (fila, faixa, desligado), 5 aleatório desliga
+5
+6
+6
+6
+5
+# 7 ver fila e pular para a 4; 7 ver fila e voltar com Enter
+7
+4
+7
+
+# 4 parar
+4
+# 9 -> 2 álbum 2; 9 -> 4 artista 3; 9 -> 5 mais tocadas; 9 -> 1 todas; 9 -> 0 cancelar
+9
+2
+2
+9
+4
+3
+9
+5
+9
+1
+9
+0
+# 9 -> 3 playlist, cancelando no ID
+9
+3
+0
+# 8 ouvir ao vivo: álbum 4 (2 faixas), pula para a última e ouve até a fila acabar (~9 s)
+9
+2
+4
+7
+2
+8
+# opção inválida no player e voltar
+x
+
+0
+#
+# ===== 7 HISTÓRICO E RELATÓRIOS =====
+7
+1
+
+2
+
+3
+
+4
+
+5
+
+# 6 limpar: primeiro "n", depois "s"
+6
+n
+
+6
+s
+
+# 1 ranking vazio
+1
+
+0
+#
+# ===== 6 BUSCAR (menu principal) =====
+6
+loop
+1
+
+#
+# ===== SAIR: primeiro desiste, depois confirma =====
+0
+n
+0
+s
