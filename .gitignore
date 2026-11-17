@@ -1,0 +1,16 @@
+# Banco de dados, músicas de demonstração e relatórios: criados pelo programa na primeira execução
+dados/
+*.db
+*.db-journal
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editores e sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
