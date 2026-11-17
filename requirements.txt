@@ -1,0 +1,6 @@
+# O Toca Aí usa SÓ a biblioteca padrão do Python: não é preciso instalar nada.
+#
+# Opcional: com o pygame instalado, o som sai pelo pygame (pausa de verdade e
+# suporte a .mp3/.ogg) em vez do winsound. Para instalar:
+#     pip install pygame
+# pygame>=2.5
