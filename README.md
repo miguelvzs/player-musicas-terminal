@@ -4,7 +4,7 @@ Programa em **Python**, feito com **Orientação a Objetos** e banco **SQLite3**
 biblioteca de músicas (artistas, álbuns, músicas e playlists) e **toca as músicas** no terminal.
 
 Atividade Avaliativa 04 de Programação Orientada a Objetos (ADS, 2º semestre, IFSP Bragança Paulista).
-Autor: Miguel ([@miguelvzs](https://github.com/miguelvzs)).
+Autor: Miguel (https://github.com/miguelvzs).
 
 ## 1. Como rodar
 
